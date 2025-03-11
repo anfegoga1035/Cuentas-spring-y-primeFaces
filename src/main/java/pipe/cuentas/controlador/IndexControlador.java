@@ -49,9 +49,27 @@ public class IndexControlador {
             this.cuentas.add(this.cuentaSeleccionada);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cuenta guardada con éxito"));
         }
+        else {
+            this.cuentaServicio.guardarCuenta(this.cuentaSeleccionada);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cuenta actualizada con éxito"));
+        }
         //Oculatamos la ventana
         PrimeFaces.current().executeScript("PF('ventanaModalCuenta').hide()");
         //Actualizar la tabla
         PrimeFaces.current().ajax().update("forma-cuentas:mensajes","forma-cuentas:cuentas-tabla");
+        //reaet
+        this.cuentaSeleccionada = null;
+
     }
+    public void eliminarCuenta(){
+        logger.info("Cuenta a eliminar: " + this.cuentaSeleccionada);
+        this.cuentaServicio.eliminarCuenta(this.cuentaSeleccionada);
+        //Eliminar el registro de la lista cuentas
+        this.cuentas.remove(this.cuentaSeleccionada);
+        //Reset del objeto selecionado
+        this.cuentaSeleccionada = null;
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Cuenta eliminada con éxito"));
+        PrimeFaces.current().ajax().update("forma-cuentas:mensajes","forma-cuentas:cuentas-tabla");
+    }
+
 }

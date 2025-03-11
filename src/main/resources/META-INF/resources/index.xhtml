@@ -49,6 +49,21 @@
                     </h:outputText>
                 </p:column>
 
+                <p:column>
+                    <p:commandButton  value="Editar" icon="pi pi-pencil"  update=":forma-modal:cuenta-ventana"
+                                     oncomplete="PF('ventanaModalCuenta').show()"
+                                    process="@this" class="ui-button-primary" style="margin-right: .5rem">
+                        <f:setPropertyActionListener target="#{indexControlador.cuentaSeleccionada}" value="#{cuenta}" />
+                        <p:resetInput target=":forma-modal:cuenta-ventana"/>
+                    </p:commandButton>
+                    <p:commandButton value="Eliminar" class="ui-button-danger" icon="pi pi-trash"
+                                     process="@this" oncomplete="PF('eliminarCuentaVentana').show()" >
+                        <f:setPropertyActionListener target="#{indexControlador.cuentaSeleccionada}" value="#{cuenta}" />
+
+                    </p:commandButton>
+
+                </p:column>
+
             </p:dataTable>
         </div>
         </h:form>
@@ -57,7 +72,7 @@
 
             <p:dialog header="Detalles Cuenta" showEffect="fade" modal="true" widgetVar="ventanaModalCuenta"
                       responsive="true">
-                <p:outputPanel id="cuenta-ventana" calss="ui-fluid">
+                <p:outputPanel id="cuenta-ventana" class="ui-fluid">
                     <div class="field">
                         <p:outputLabel for="nombre"  >Nombre</p:outputLabel>
                         <p:inputText id="nombre" value="#{indexControlador.cuentaSeleccionada.nombre}"
@@ -82,12 +97,25 @@
                     </div>
                 </p:outputPanel>
                 <f:facet name="footer">
-                    <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{indexControlador.guardarCuenta()}"
+                    <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{indexControlador.guardarCuenta}"
                                      process="cuenta-ventana @this"/>
                     <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('ventanaModalCuenta').hide()"
                                      class="ui-button-secondary" type="button"/>
                 </f:facet>
             </p:dialog>
+
+            <p:confirmDialog widgetVar="eliminarCuentaVentana" showEffect="fade" width="300"
+                             message="¿Estas seguro de eliminar la cuenta?"
+                             header="Confirmar" severity="warn">
+                <p:commandButton value="Si" icon="pi pi-check" actionListener="#{indexControlador.eliminarCuenta}"
+                                 process="@this"
+                                 update=":forma-cuentas:cuentas-tabla,:forma-cuentas:messages"
+                                 oncomplete="PF('eliminarCuentaVentana').hide()" />
+                <p:commandButton value="No" type="button" styleClass="ui-button-secondary"
+                                 icon="pi pi-times" onclick="PF('eliminarCuentaVentana').hide()"/>
+
+            </p:confirmDialog>
+
 
 
 
